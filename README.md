@@ -1,23 +1,24 @@
 # FlexLoRA
 
-This branch contains the official implementation for the work “**Federated Fine-tuning of Large Language Models under Heterogeneous Language Tasks and Client Resources**”. See more details in our [paper](https://arxiv.org/pdf/2402.11505.pdf). 
+This branch contains the official implementation for the work “**Federated Fine-tuning of Large Language Models under Heterogeneous Language Tasks and Client Resources**”. See more details in our [paper](https://arxiv.org/pdf/2402.11505.pdf).
 
 > Federated Learning (FL) has recently been applied to the parameter-efficient fine-tuning of Large Language Models (LLMs). While promising, it raises significant challenges due to the heterogeneous resources and data distributions of clients. This study introduces FlexLoRA, a simple yet effective aggregation scheme for LLM fine-tuning, which mitigates the “buckets effect” in traditional FL that restricts the potential of clients with ample resources by tying them to the capabilities of the least-resourced participants. FlexLoRA allows for dynamic adjustment of local LoRA ranks, fostering the development of a global model imbued with broader, less task-specific knowledge. By synthesizing a full-size LoRA weight from individual client contributions and employing Singular Value Decomposition (SVD) for weight redistribution, FlexLoRA fully leverages heterogeneous client resources. Involving over 1,600 clients performing diverse NLP tasks, our experiments validate the efficacy of FlexLoRA, with the federated global model achieving up to a 3.1% average improvement in downstream NLP task performance. FlexLoRA’s practicality is further underscored by its seamless integration with existing LoRA-based FL methods and theoretical analysis, offering a path toward scalable, privacy-preserving federated tuning for LLMs.
 
 In the future, we will merge this branch into the [llm](https://github.com/alibaba/FederatedScope/tree/llm) branch of FederatedScope.
 
 ## Project Structure
+
 ```Markdown
 .
 ├── fed_utils
-│   ├── adaptive_peft.py  
+│   ├── adaptive_peft.py
 │   ├── client.py  // local client for training data
 │   ├── client_participation_scheduling.py  // select clients to particiate for each round
-│   └── model_aggregation.py  // define aggregation methods 
+│   └── model_aggregation.py  // define aggregation methods
 ├── templates // templates for generating prompt
 ├── utils
-│   ├── callbacks.py  
-│   └── prompter.py  
+│   ├── callbacks.py
+│   └── prompter.py
 ├── heterolora.py // experiments related to heteroLoRA
 ├── main.py // experiments related to FlexLoRA
 ```
@@ -48,13 +49,11 @@ The data is collected from [Natural Instructions](https://github.com/allenai/nat
 
 `cache_dir` : directory to cache your dataset
 
-`output_dir`: directory to save the trained model in each commm round. 
+`output_dir`: directory to save the trained model in each commm round.
 
 `session_name`: name your experiment session
 
 `seed`: random seed. Default: 42
-
-
 
 #### FL hyperparamas
 
@@ -75,7 +74,6 @@ The data is collected from [Natural Instructions](https://github.com/allenai/nat
 `early_stop` : Early stop for FL training. If True, will apply early stop.
 
 `patience` : Early stop patience.
-
 
 #### Local training hyperparams
 
@@ -101,44 +99,48 @@ The data is collected from [Natural Instructions](https://github.com/allenai/nat
 
 #### LoRA hyperparams
 
-`lora_r`: rank for LoRA initialization. For FedAvg, need to set it to 8. For other settings, this hyperparameter can be set into any random value. 
+`lora_r`: rank for LoRA initialization. For FedAvg, need to set it to 8. For other settings, this hyperparameter can be set into any random value.
 
-`lora_alpha`: lora_alpha for LoRA 
+`lora_alpha`: lora_alpha for LoRA
 
 `lora_dropout`: lora_dropout for LoRA
 
 `lora_target_modules`: layers to put LoRA on
 
-
-
-
 ## Running Examples
-We provide some example scripts to conduct the experiments. 
+
+We provide some example scripts to conduct the experiments.
 The arguments can be adjusted according to the `help` information in their definitions.
+
 1. FedAvg without FlexLoRA(homogeneous rank distribution)
+
 ```Shell
-python main.py --model datajuicer/LLaMA-1B-dj-refine-150B --baseline fedavg --aggregation homo --data_path ./data
+python main.py --global_model datajuicer/LLaMA-1B-dj-refine-150B --baseline fedavg --aggregation homo --data_path ./data
 ```
 
 2. FedAvg with FlexLoRA(normal rank distribution)
+
 ```Shell
 python main.py --model datajuicer/LLaMA-1B-dj-refine-150B --baseline fedavg --aggregation normal --data_path ./data
 ```
 
-
 3. SLoRA with FlexLoRA(normal rank distribution)
+
 ```Shell
 python main.py --model datajuicer/LLaMA-1B-dj-refine-150B --baseline slora --aggregation normal --data_path ./data
 ```
 
 4. FedAvg with HeteroLoRA(normal rank distribution)
+
 ```Shell
 python heterolora.py --model datajuicer/LLaMA-1B-dj-refine-150B --baseline fedavg --aggregation normal --data_path ./data
 ```
 
 ## License
-This project adopts the Apache-2.0 License. 
+
+This project adopts the Apache-2.0 License.
 If the implementations and/or our paper were useful to you, please consider citing this [work](https://arxiv.org/pdf/2402.11505.pdf):
+
 ```latex
 @article{bai2024federated,
   title={Federated Fine-tuning of Large Language Models under Heterogeneous Language Tasks and Client Resources},

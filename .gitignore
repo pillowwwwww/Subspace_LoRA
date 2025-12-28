@@ -1,6 +1,8 @@
 # project specific
 doc/build
-
+#数据
+/data
+/evaluate
 # ml log
 wandb/
 
